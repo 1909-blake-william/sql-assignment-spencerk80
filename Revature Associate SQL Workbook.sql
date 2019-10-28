@@ -73,12 +73,17 @@ WHERE firstname = 'Robert' AND lastname = 'Walter';
 --In this section you will be using the Oracle system functions, as well as your own functions, to perform various actions against the database
 --3.1 System Defined Functions
 --Task � Create a function that returns the current time.
+SELECT TO_CHAR(CURRENT_DATE, 'HH:MI:SS') FROM dual;
 --Task � create a function that returns the length of a mediatype from the mediatype table
+SELECT LENGTH(name) AS Lenth_of_media_type FROM mediatype;
 --3.2 System Defined Aggregate Functions
 --Task � Create a function that returns the average total of all invoices
+SELECT '$' || ROUND(AVG(total), 2) AS Avg_Invoice_Total FROM invoice;
 --Task � Create a function that returns the most expensive track
+SELECT '$' || MAX(unitprice) AS Most_Expensive_Track FROM track;
 --3.3 User Defined Scalar Functions
 --Task � Create a function that returns the average price of invoiceline items in the invoiceline table
+SELECT '$' || ROUND(AVG(unitprice), 2) AS Avg_Item_Price FROM invoiceline;
 --3.4 User Defined Table Valued Functions
 --Task � Create a function that returns all employees who are born after 1968.
 --4.0 Stored Procedures
@@ -101,11 +106,30 @@ WHERE firstname = 'Robert' AND lastname = 'Walter';
 --In this section you will be working with combing various tables through the use of joins. You will work with outer, inner, right, left, cross, and self joins.
 --7.1 INNER
 --Task � Create an inner join that joins customers and orders and specifies the name of the customer and the invoiceId.
+SELECT lastname, firstname, invoiceid FROM customer
+INNER JOIN invoice
+ON invoice.customerid = customer.customerid
+ORDER BY lastname ASC;
 --7.2 OUTER
 --Task � Create an outer join that joins the customer and invoice table, specifying the CustomerId, firstname, lastname, invoiceId, and total.
+SELECT customer.customerid, lastname, firstname, invoiceid, total from customer
+FULL JOIN invoice
+ON invoice.customerid = customer.customerid
+ORDER BY lastname ASC;
 --7.3 RIGHT
 --Task � Create a right join that joins album and artist specifying artist name and title.
+SELECT album.title, artist.name FROM album
+RIGHT JOIN artist
+ON album.artistid = artist.artistid
+ORDER BY album.title ASC;
 --7.4 CROSS
 --Task � Create a cross join that joins album and artist and sorts by artist name in ascending order.
+SELECT artist.name, album.title FROM artist
+CROSS JOIN album
+ORDER BY artist.name ASC;
 --7.5 SELF
 --Task � Perform a self-join on the employee table, joining on the reportsto column.
+SELECT t1.lastname || ', ' || t1.firstname AS Employee, t2.lastname || ', ' || t2.firstname AS Manager FROM employee t1
+INNER JOIN employee t2
+ON t2.employeeid = t1.reportsto
+ORDER BY t1.lastname ASC;
